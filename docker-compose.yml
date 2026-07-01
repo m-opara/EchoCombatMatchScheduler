@@ -1,0 +1,13 @@
+services:
+  bot:
+    build: .
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "file:/data/dev.db"
+    volumes:
+      - sqlite-data:/data
+    restart: unless-stopped
+
+volumes:
+  sqlite-data:
