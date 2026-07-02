@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
 import type { Command } from "./index.js";
 import { eventService } from "../services/EventService.js";
+import { scheduleBoardService } from "../services/ScheduleBoardService.js";
 import { parseScheduledDateTime } from "../util/dateTime.js";
 import { isValidTimeZone } from "../util/timezones.js";
 
@@ -70,6 +71,8 @@ export const scheduleCommand: Command = {
       startsAt,
       creatorUserId: interaction.user.id,
     });
+
+    await scheduleBoardService.refresh(interaction.client, interaction.guildId);
 
     await interaction.reply({
       content: "✅ Event created.",

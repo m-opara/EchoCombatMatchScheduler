@@ -16,6 +16,16 @@ export class EventRepository {
     });
   }
 
+  async updateSignupMessage(eventId: string, data: {
+    signupChannelId: string;
+    signupMessageId: string;
+  }) {
+    return prisma.scheduledEvent.update({
+      where: { id: eventId },
+      data,
+    });
+  }
+
   async getById(eventId: string) {
     return prisma.scheduledEvent.findUnique({
       where: { id: eventId },
@@ -39,6 +49,30 @@ export class EventRepository {
       },
       orderBy: {
         startsAt: "asc",
+      },
+    });
+  }
+
+  async getStaleBoardMessageRefs(
+    guildId: string,
+    channelId: string,
+    now = new Date(),
+  ) {
+    return prisma.scheduledEvent.findMany({
+      where: {
+        guildId,
+        signupChannelId: channelId,
+        signupMessageId: {
+          not: null,
+        },
+        startsAt: {
+          lte: now,
+        },
+      },
+      select: {
+        id: true,
+        signupChannelId: true,
+        signupMessageId: true,
       },
     });
   }
