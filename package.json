@@ -1,7 +1,7 @@
 {
   "name": "echo-combat-match-scheduler",
-  "version": "0.1.0",
-  "description": "A Discord scheduling bot shell for Echo Combat match planning.",
+  "version": "1.0.0",
+  "description": "A Discord scheduling bot for Echo Combat match planning.",
   "main": "dist/index.js",
   "type": "module",
   "private": true,
