@@ -7,6 +7,7 @@ Status: v1.0.0 release.
 ## Core Features
 
 - Slash commands for scheduling, viewing, and configuring matches.
+- Moderator slash commands for editing or deleting events by board message link.
 - Per-event Discord messages with Join and Leave buttons.
 - Upcoming events board that keeps event messages ordered by start time.
 - Configurable event title emoji per server.
@@ -135,6 +136,8 @@ SQLite data is stored in the `sqlite-data` named volume mounted at `/data`.
 - `/ping`: Basic health check command.
 - `/schedule title start timezone`: Schedule a public match. `start` uses `MM-dd-yyyy h:mm AM/PM`, for example `07-15-2026 8:00 PM`. `timezone` is an IANA timezone such as `America/New_York` and supports autocomplete.
 - `/events`: Show upcoming events with Discord timestamps and current signups.
+- `/event-edit message title`: Edit an event title. `message` accepts a Discord message link copied from the event board message or the raw message ID. Requires the Manage Events permission by default.
+- `/event-delete message`: Delete an event. `message` accepts a Discord message link copied from the event board message or the raw message ID. Requires the Manage Events permission by default.
 - `/config`: Show current server config when used without options.
 - `/config upcoming_channel`: Set the channel for upcoming event board messages.
 - `/config reminder_channel`: Set the channel for role reminder pings.
@@ -186,6 +189,7 @@ Discord output uses timestamp markup such as `<t:...:F>` and `<t:...:R>`. Discor
 ## Troubleshooting
 
 - Commands do not appear: run `npm run commands:register` with the correct `DISCORD_CLIENT_ID`, `DISCORD_GUILD_ID`, and token.
+- Event edit/delete cannot find the event: copy the link from the bot's event board message, or provide that message's raw ID.
 - Bot cannot post board messages: check `upcoming_channel`, View Channels, Send Messages, Read Message History, and Manage Messages permissions.
 - Role reminders do not ping: check `reminder_channel`, `ping_role`, role order, and mention permissions.
 - DM reminders fail for a player: the user may have DMs disabled or may block bot DMs.
@@ -207,6 +211,7 @@ Discord output uses timestamp markup such as `<t:...:F>` and `<t:...:R>`. Discor
 - `src/repositories`: Prisma data access.
 - `src/discord/eventMessage.ts`: Discord event message content and buttons.
 - `src/util/dateTime.ts`: time parsing and Discord timestamp helpers.
+- `src/util/discordMessageReference.ts`: Discord message link and raw ID parsing.
 - `prisma/schema.prisma`: data model for guild config, events, signups, and reminder logs.
 
 ## Release Note

@@ -39,6 +39,28 @@ export class EventRepository {
     });
   }
 
+  async getBySignupMessageId(guildId: string, signupMessageId: string) {
+    return prisma.scheduledEvent.findFirst({
+      where: {
+        guildId,
+        signupMessageId
+      },
+      include: {
+        signups: true
+      }
+    });
+  }
+
+  async updateTitle(eventId: string, title: string) {
+    return prisma.scheduledEvent.update({
+      where: { id: eventId },
+      data: { title },
+      include: {
+        signups: true
+      }
+    });
+  }
+
   async getUpcoming(guildId: string, now = new Date()) {
     return prisma.scheduledEvent.findMany({
       where: {

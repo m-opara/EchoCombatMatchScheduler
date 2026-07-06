@@ -7,6 +7,11 @@ type EventWithSignups = ScheduledEvent & { signups: ScheduledSignup[] };
 export type LeaveEventResult =
   { deleted: true; event: EventWithSignups } | { deleted: false; event: EventWithSignups };
 
+export type DeleteEventResult = {
+  event: EventWithSignups;
+  staleMessageRefs: { channelId: string; messageId: string }[];
+};
+
 export class EventService {
   constructor(private readonly eventRepository = new EventRepository()) {}
 
@@ -90,6 +95,53 @@ export class EventService {
 
   async getUpcomingEvents(guildId: string) {
     return this.eventRepository.getUpcoming(guildId);
+  }
+
+  async updateEventTitleByMessage(input: {
+    guildId: string;
+    messageId: string;
+    title: string;
+  }): Promise<EventWithSignups> {
+    const title = this.normalizeTitle(input.title);
+    const event = await this.eventRepository.getBySignupMessageId(input.guildId, input.messageId);
+
+    if (!event) {
+      throw new Error("I couldn't find a scheduled event for that message.");
+    }
+
+    return this.eventRepository.updateTitle(event.id, title);
+  }
+
+  async deleteEventByMessage(input: { guildId: string; messageId: string }): Promise<DeleteEventResult> {
+    const event = await this.eventRepository.getBySignupMessageId(input.guildId, input.messageId);
+
+    if (!event) {
+      throw new Error("I couldn't find a scheduled event for that message.");
+    }
+
+    const staleMessageRefs =
+      event.signupChannelId && event.signupMessageId
+        ? [
+            {
+              channelId: event.signupChannelId,
+              messageId: event.signupMessageId
+            }
+          ]
+        : [];
+
+    await this.eventRepository.delete(event.id);
+
+    return { event, staleMessageRefs };
+  }
+
+  private normalizeTitle(title: string) {
+    const normalizedTitle = title.trim();
+
+    if (!normalizedTitle) {
+      throw new Error("Event title cannot be empty.");
+    }
+
+    return normalizedTitle;
   }
 
   private async throwIfEventNoLongerExists(eventId: string) {
