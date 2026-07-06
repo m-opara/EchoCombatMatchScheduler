@@ -2,7 +2,7 @@
 
 Echo Combat Match Scheduler is a Discord bot for planning public Echo Combat matches. It lets players create scheduled events, join or leave from Discord buttons, view upcoming matches, receive reminders, and automatically clean up expired events.
 
-Status: v1.0.0 release.
+Status: v1.1.0 release.
 
 ## Core Features
 
@@ -48,7 +48,7 @@ The bot needs these permissions in the channels it uses:
 
 For reminders, the bot also needs permission to mention the configured ping role. The role should be mentionable by the bot, and the bot role must be high enough in the server role order for Discord to allow the mention.
 
-The bot uses the `Guilds` gateway intent. It does not require privileged intents for v1.0.0.
+The bot uses the `Guilds` gateway intent. It does not require privileged intents for v1.1.0.
 
 ## Environment Variables
 
@@ -215,5 +215,7 @@ Discord output uses timestamp markup such as `<t:...:F>` and `<t:...:R>`. Discor
 - `prisma/schema.prisma`: data model for guild config, events, signups, and reminder logs.
 
 ## Release Note
+
+v1.1.0 adds configurable event emoji support and event moderation commands for editing or deleting scheduled matches.
 
 v1.0.0 is the first complete release of the Echo Combat Match Scheduler bot. It includes scheduling, signup buttons, ordered event board reconciliation, configurable reminders, reminder delivery, and expired event cleanup.
