@@ -4,6 +4,9 @@ Echo Combat Match Scheduler is a Discord bot for planning public Echo Combat mat
 
 Status: v1.1.0 release.
 
+>[!TIP]
+>Run the `quick setup.bat` file to install dependencies and compile in one go.
+
 ## Core Features
 
 - Slash commands for scheduling, viewing, and configuring matches.
